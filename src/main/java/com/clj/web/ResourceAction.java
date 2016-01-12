@@ -14,6 +14,7 @@ import com.clj.dao.interfaces.ArticleServiceInter;
 import com.clj.dao.services.ArticleServiceBean;
 import com.clj.domain.Articlecontent;
 import com.clj.domain.ContentLine;
+import com.clj.resources.Resources;
 import com.clj.web.utils.ActionContextService;
 import com.opensymphony.xwork2.ActionContext;
 
@@ -21,6 +22,7 @@ import com.opensymphony.xwork2.ActionContext;
 public class ResourceAction {
 
 	@Resource private ArticleServiceInter articleService;
+	@Resource private Resources resources;
 	
 	public String getArticleContent()
 	{
@@ -46,10 +48,11 @@ public class ResourceAction {
 			{
 				if(line.indexOf("<img>")!=-1)
 				{
-					String url = line.substring(line.indexOf("<img>") + "<img>".length(), line.indexOf("</img>"));
+					String url = resources.getAPACHE_HOME_SERVER_IP() + 
+							line.substring(line.indexOf("<img>") + "<img>".length(), line.indexOf("</img>"));
 					ContentLine cl = new ContentLine("img", 
-																		url.substring(url.lastIndexOf("=")+1),
-																		url);
+													url.substring(url.lastIndexOf(".")+1),
+													url);
 					article.add(cl);
 				}
 				else if(line.indexOf("<iframe>")!=-1)

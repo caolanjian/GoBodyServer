@@ -1,22 +1,16 @@
 package com.clj.web;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
-import resources.webResource.Resources;
 
 import com.clj.dao.interfaces.ArticleServiceInter;
 import com.clj.dao.interfaces.SubjectServiceInter;
-import com.clj.dao.services.ArticleServiceBean;
-import com.clj.dao.services.SubjectServiceBean;
 import com.clj.domain.Article;
+import com.clj.resources.Resources;
 import com.clj.web.utils.ActionContextService;
 import com.opensymphony.xwork2.ActionContext;
 
@@ -26,7 +20,7 @@ public class ListAction {
 
 	@Resource private ArticleServiceInter articleService;
 	@Resource private SubjectServiceInter subjectService;
-	
+	@Resource private Resources resources;
 	
 
 	public String getList()
@@ -53,9 +47,26 @@ public class ListAction {
 		for(Article art : articleList)
 		{
 			//reset url
-			String url = Resources.SERVER_IP + Resources.SERVER_NAME + "/Resource!getArticleContent.action?articleId=" + art.getArticleid();
+			String url = resources.getTOMCAT_SERVER1_IP() + resources.getTOMCAT_SERVER_APP_NAME() + "/Resource!getArticleContent.action?articleId=" + art.getArticleid();
 			art.setUrl(url);
-
+			
+			if(art.getImg1() != null && !art.getImg1().equals(""))
+			{
+				String imgUrl1 = resources.getAPACHE_IMG_SERVER_IP() + art.getImg1();
+				art.setImg1(imgUrl1);
+			}
+			
+			if(art.getImg2() != null && !art.getImg2().equals(""))
+			{
+				String imgUrl2 = resources.getAPACHE_IMG_SERVER_IP() + art.getImg2();
+				art.setImg2(imgUrl2);
+			}
+			
+			if(art.getImg3() != null && !art.getImg3().equals(""))
+			{
+				String imgUrl3 = resources.getAPACHE_IMG_SERVER_IP() + art.getImg3();
+				art.setImg3(imgUrl3);
+			}
 		}
 		
 		actionContextService.setParaToSession("articleList", articleList);
@@ -84,15 +95,34 @@ public class ListAction {
 			subject = "fitness";
 		}
 		System.out.println(subject);
-		String subjectInDB = Resources.channelIndexMap.get(subject);
+		String subjectInDB = resources.getChannelIndexMap().get(subject);
 		System.out.println(subjectInDB);
 		articleList = articleService.queryArticleBySubjectAndLastPublishDate(lastPublishDate, subjectInDB);
 		
 		for(Article art : articleList)
 		{
 			//reset url
-			String url = Resources.SERVER_IP + Resources.SERVER_NAME + "/Resource!getArticleContent.action?articleId=" + art.getArticleid();
+			String url = resources.getTOMCAT_SERVER1_IP() + resources.getTOMCAT_SERVER_APP_NAME() + "/Resource!getArticleContent.action?articleId=" + art.getArticleid();
 			art.setUrl(url);
+			
+			if(art.getImg1() != null && !art.getImg1().equals(""))
+			{
+				String imgUrl1 = resources.getAPACHE_IMG_SERVER_IP() + art.getImg1();
+				art.setImg1(imgUrl1);
+			}
+			
+			if(art.getImg2() != null && !art.getImg2().equals(""))
+			{
+				String imgUrl2 = resources.getAPACHE_IMG_SERVER_IP() + art.getImg2();
+				art.setImg2(imgUrl2);
+			}
+			
+			if(art.getImg3() != null && !art.getImg3().equals(""))
+			{
+				String imgUrl3 = resources.getAPACHE_IMG_SERVER_IP() + art.getImg3();
+				art.setImg3(imgUrl3);
+			}
+
 		}
 		actionContextService.setParaToSession("items", articleList.size());
 		actionContextService.setParaToSession("articleList", articleList);
